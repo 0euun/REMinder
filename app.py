@@ -24,13 +24,13 @@ DREAM_TYPE_OPTIONS = list(DREAM_TYPE_LABELS.keys())
 
 def sidebar():
     with st.sidebar:
-        st.title("🌙 REMinder")
+        st.title(":material/nights_stay: REMinder")
         streak = db.get_streak()
         st.metric("연속 기록", f"{streak['streak']}일", help="오늘 포함 연속으로 기록한 일수")
         st.metric("전체 기록", f"{streak['total_days']}일")
         st.divider()
 
-        with st.expander("💡 Reality Check 가이드"):
+        with st.expander(":material/lightbulb: Reality Check 가이드"):
             st.caption(
                 "Reality Check는 '지금 꿈인가?'를 의식적으로 확인하는 자각몽 기법입니다.\n\n"
                 "**설정 방법**\n"
@@ -42,7 +42,13 @@ def sidebar():
 
         return st.radio(
             "메뉴",
-            ["꿈 기록하기", "꿈 목록", "대시보드", "🔍 검색", "✨ 드림사인 & 리포트"],
+            [
+                ":material/edit_note: 꿈 기록하기",
+                ":material/format_list_bulleted: 꿈 목록",
+                ":material/bar_chart: 대시보드",
+                ":material/search: 검색",
+                ":material/auto_awesome: 드림사인 & 리포트",
+            ],
             label_visibility="collapsed",
         )
 
@@ -50,7 +56,7 @@ def sidebar():
 # ── 꿈 기록 폼 ──────────────────────────────────────────────
 
 def page_record():
-    st.header("꿈 기록하기")
+    st.header(":material/edit_note: 꿈 기록하기")
 
     with st.form("dream_form"):
         col1, col2 = st.columns([1, 2])
@@ -74,12 +80,19 @@ def page_record():
             placeholder="기억나는 대로 자유롭게 적어주세요.",
         )
 
-        with st.expander("🛌 수면 기법 & 컨디션 (선택)"):
+        with st.expander(":material/hotel: 수면 기법 & 컨디션 (선택)"):
             techniques = st.multiselect(
                 "어젯밤 시도한 기법",
                 db.TECHNIQUES,
-                help="자각몽/꿈 회상을 위해 시도한 기법을 모두 선택하세요.",
             )
+            with st.expander(":material/help: 기법 설명 보기"):
+                st.markdown(
+                    "| 기법 | 설명 |\n|------|------|\n"
+                    + "\n".join(
+                        f"| **{t}** | {desc} |"
+                        for t, desc in db.TECHNIQUE_DESC.items()
+                    )
+                )
             col_s1, col_s2 = st.columns(2)
             with col_s1:
                 sleep_hours = st.number_input(
@@ -129,7 +142,7 @@ def page_record():
         if dream_type_key == "NO_MEMORY":
             with st.spinner("회상 유도 질문 생성 중…"):
                 questions = llm.get_partial_recall_prompt(content)
-            st.subheader("💭 이런 게 기억나지 않나요?")
+            st.subheader(":material/psychology: 이런 게 기억나지 않나요?")
             for q in questions:
                 st.write(f"- {q}")
 
@@ -149,7 +162,7 @@ def page_record():
 
 def _show_analysis(result: dict):
     st.divider()
-    st.subheader("AI 분석 결과")
+    st.subheader(":material/auto_fix_high: AI 분석 결과")
     col1, col2 = st.columns([3, 1])
     with col1:
         st.write(result.get("analysis_text", ""))
@@ -162,7 +175,7 @@ def _show_analysis(result: dict):
     emotions = result.get("recurring_emotions", [])
 
     if any([people, places, emotions]):
-        st.subheader("반복 요소")
+        st.subheader(":material/repeat: 반복 요소")
         c1, c2, c3 = st.columns(3)
         with c1:
             st.caption("인물")
@@ -181,7 +194,7 @@ def _show_analysis(result: dict):
 # ── 꿈 목록 ─────────────────────────────────────────────────
 
 def page_list():
-    st.header("꿈 목록")
+    st.header(":material/format_list_bulleted: 꿈 목록")
     dreams = db.list_dreams(limit=100)
 
     if not dreams:
@@ -190,11 +203,12 @@ def page_list():
 
     for row in dreams:
         techniques = json.loads(row["techniques_tried"] or "[]")
-        technique_tag = f"  🎯 {', '.join(techniques)}" if techniques else ""
+        technique_tag = f"  [{', '.join(techniques)}]" if techniques else ""
+        score_tag = f"  {row['recall_score']}/10점" if row["recall_score"] else ""
         with st.expander(
             f"**{row['dream_date']}** — {row['title'] or '(제목 없음)'}  "
             f"`{DREAM_TYPE_LABELS.get(row['dream_type'], row['dream_type'])}`"
-            + (f"  ⭐ {row['recall_score']}/10" if row["recall_score"] else "")
+            + score_tag
             + technique_tag
         ):
             st.write(row["content"])
@@ -296,9 +310,13 @@ def _calendar_chart(
 # ── 대시보드 ─────────────────────────────────────────────────
 
 def page_dashboard():
-    st.header("대시보드")
+    st.header(":material/bar_chart: 대시보드")
 
-    tab1, tab2, tab3 = st.tabs(["📊 점수 & 분포", "📅 캘린더", "🎯 기법 & 컨디션"])
+    tab1, tab2, tab3 = st.tabs([
+        ":material/show_chart: 점수 & 분포",
+        ":material/calendar_month: 캘린더",
+        ":material/track_changes: 기법 & 컨디션",
+    ])
 
     # ── Tab 1: 점수 & 분포 ──────────────────────────────────
     with tab1:
@@ -374,7 +392,6 @@ def page_dashboard():
         st.altair_chart(_calendar_chart(activity, "dream_date", "cnt", "greens"), use_container_width=True)
 
         st.subheader("자각몽 발생 캘린더 (최근 1년)")
-        st.caption("초록색 날 = 자각몽 기록")
         lucid_only = [r for r in lucid_cal if r["is_lucid"]]
         st.altair_chart(_calendar_chart(lucid_only, "dream_date", "is_lucid", "oranges"), use_container_width=True)
 
@@ -423,7 +440,6 @@ def page_dashboard():
                 df_c = pd.DataFrame(condition_data)
                 df_scored = df_c[df_c["recall_score"].notna()].copy()
 
-                # 수면 시간별 평균 회상 점수
                 df_sleep = df_scored[
                     df_scored["sleep_hours"].notna() & (df_scored["sleep_hours"] > 0)
                 ].copy()
@@ -452,7 +468,6 @@ def page_dashboard():
                     )
                     st.altair_chart(chart, use_container_width=True)
 
-                # 카페인/알코올/알람 비교
                 rows = []
                 for col_name, label in [
                     ("caffeine_prev_day", "카페인"),
@@ -484,7 +499,6 @@ def page_dashboard():
                     )
                     st.altair_chart(chart, use_container_width=True)
 
-                # Reality Check 횟수 vs 자각몽
                 df_rc = df_c[df_c["reality_check_count"] > 0].copy()
                 if not df_rc.empty and df_rc["is_lucid"].notna().any():
                     st.caption("Reality Check 횟수별 자각몽 발생율")
@@ -519,7 +533,7 @@ def page_dashboard():
 # ── 검색 ─────────────────────────────────────────────────────
 
 def page_search():
-    st.header("🔍 꿈 검색")
+    st.header(":material/search: 검색")
 
     col1, col2 = st.columns([4, 1])
     with col1:
@@ -546,10 +560,11 @@ def page_search():
 
     st.caption(f"{len(results)}개 발견")
     for row in results:
+        score_tag = f"  {row['recall_score']}/10점" if row.get("recall_score") else ""
         with st.expander(
             f"**{row['dream_date']}** — {row['title'] or '(제목 없음)'}  "
             f"`{DREAM_TYPE_LABELS.get(row['dream_type'], row['dream_type'])}`"
-            + (f"  ⭐ {row['recall_score']}/10" if row.get('recall_score') else "")
+            + score_tag
         ):
             st.write(row["content"])
             if row.get("analysis_text"):
@@ -560,9 +575,13 @@ def page_search():
 # ── 드림사인 & 리포트 ─────────────────────────────────────────
 
 def page_dream_signs():
-    st.header("✨ 드림사인 & 리포트")
+    st.header(":material/auto_awesome: 드림사인 & 리포트")
 
-    tab1, tab2, tab3 = st.tabs(["🎯 드림사인 Top 5", "💫 MILD 인텐션", "📋 주간 리포트"])
+    tab1, tab2, tab3 = st.tabs([
+        ":material/psychology: 드림사인 Top 5",
+        ":material/bedtime: MILD 인텐션",
+        ":material/summarize: 주간 리포트",
+    ])
 
     # ── Tab 1: 드림사인 클러스터링 ──────────────────────────
     with tab1:
@@ -622,7 +641,7 @@ def page_dream_signs():
             st.session_state["mild_intention"] = intention
 
         if "mild_intention" in st.session_state:
-            st.info(f"💭 {st.session_state['mild_intention']}")
+            st.info(st.session_state["mild_intention"])
             st.caption("잠들기 전 이 문장을 10번 천천히 되뇌어보세요.")
 
     # ── Tab 3: 주간 리포트 ──────────────────────────────────
@@ -654,13 +673,13 @@ def page_dream_signs():
 
 page = sidebar()
 
-if page == "꿈 기록하기":
+if page.endswith("꿈 기록하기"):
     page_record()
-elif page == "꿈 목록":
+elif page.endswith("꿈 목록"):
     page_list()
-elif page == "대시보드":
+elif page.endswith("대시보드"):
     page_dashboard()
-elif page == "🔍 검색":
+elif page.endswith("검색"):
     page_search()
-elif page == "✨ 드림사인 & 리포트":
+elif page.endswith("드림사인 & 리포트"):
     page_dream_signs()

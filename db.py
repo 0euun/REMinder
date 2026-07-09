@@ -18,6 +18,16 @@ DREAM_TYPES = {
 
 TECHNIQUES = ["WBTB", "MILD", "WILD", "FILD", "SSILD", "현실 확인", "수면 일기"]
 
+TECHNIQUE_DESC = {
+    "WBTB": "Wake Back To Bed — 5~6시간 수면 후 잠깐 깨어 있다가 다시 잠드는 기법. REM 수면 진입을 노림.",
+    "MILD": "Mnemonic Induction of Lucid Dreams — 잠들기 전 드림사인을 떠올리며 '꿈에서 알아차리겠다'는 의도를 반복 각인.",
+    "WILD": "Wake Initiated Lucid Dream — 깨어있는 상태에서 의식을 유지하며 곧바로 꿈 속으로 진입하는 고급 기법.",
+    "FILD": "Finger Induced Lucid Dream — 반수면 상태에서 손가락을 아주 살짝 두드리며 의식을 꿈으로 끌어들이는 기법.",
+    "SSILD": "Senses Initiated Lucid Dream — 눈/귀/몸 감각에 반복적으로 주의를 기울여 자각몽 상태로 유도.",
+    "현실 확인": "Reality Check — 낮 동안 '지금 꿈인가?'를 의식적으로 확인 (손 보기, 코 막고 숨쉬기 등). 꿈에서도 같은 행동을 하도록 습관화.",
+    "수면 일기": "Sleep Journal — 매일 아침 꿈을 바로 기록하는 습관. 꿈 회상력을 높이고 드림사인 파악에 도움.",
+}
+
 
 def get_conn() -> sqlite3.Connection:
     conn = sqlite3.connect(DB_PATH)
