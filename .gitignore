@@ -1,41 +1,44 @@
-HELP.md
-.gradle
+# ── Spring Boot (springboot/ 하위) ──────────────────────────
+springboot/.gradle/
+springboot/build/
+springboot/bin/
+springboot/out/
+springboot/!**/src/main/**/build/
+springboot/!**/src/test/**/build/
+springboot/src/main/resources/application-db.yml
+springboot/src/main/resources/application-ai.yml
+
+# ── 루트에 남아 있는 Gradle 잔재 ───────────────────────────
+.gradle/
 build/
-!gradle/wrapper/gradle-wrapper.jar
-!**/src/main/**/build/
-!**/src/test/**/build/
+bin/
 
-### yml ###
-/src/main/resources/application-db.yml
-/src/main/resources/application-ai.yml
-
-### STS ###
-.apt_generated
+# ── IDE ─────────────────────────────────────────────────────
+.idea/
+*.iws
+*.iml
+*.ipr
+.vscode/
 .classpath
 .factorypath
 .project
 .settings
 .springBeans
 .sts4-cache
-bin/
-!**/src/main/**/bin/
-!**/src/test/**/bin/
+.apt_generated
 
-### IntelliJ IDEA ###
-.idea
-*.iws
-*.iml
-*.ipr
-out/
-!**/src/main/**/out/
-!**/src/test/**/out/
+# ── Python / Streamlit ──────────────────────────────────────
+venv/
+__pycache__/
+*.pyc
+*.pyo
+.env
+.streamlit/secrets.toml
 
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
+# ── SQLite DB ────────────────────────────────────────────────
+*.db
+*.db-shm
+*.db-wal
 
-### VS Code ###
-.vscode/
+# ── 기타 ────────────────────────────────────────────────────
+HELP.md
