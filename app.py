@@ -16,6 +16,33 @@ st.set_page_config(
     layout="wide",
 )
 
+
+def check_password() -> bool:
+    """secrets.toml의 APP_PASSWORD와 대조하는 단순 비밀번호 게이트."""
+    if st.session_state.get("authenticated"):
+        return True
+
+    st.title(":material/nights_stay: REMinder")
+    app_password = st.secrets.get("APP_PASSWORD", "")
+    if not app_password:
+        st.error(".streamlit/secrets.toml에 APP_PASSWORD가 설정되어 있지 않습니다.")
+        return False
+
+    with st.form("login_form"):
+        pw = st.text_input("비밀번호", type="password")
+        submitted = st.form_submit_button("입장")
+    if submitted:
+        if pw == app_password:
+            st.session_state["authenticated"] = True
+            st.rerun()
+        else:
+            st.error("비밀번호가 틀렸습니다.")
+    return False
+
+
+if not check_password():
+    st.stop()
+
 DREAM_TYPE_LABELS = {k: v for k, v in db.DREAM_TYPES.items()}
 DREAM_TYPE_OPTIONS = list(DREAM_TYPE_LABELS.keys())
 
@@ -84,6 +111,8 @@ def page_record():
             techniques = st.multiselect(
                 "어젯밤 시도한 기법",
                 db.TECHNIQUES,
+                accept_new_options=True,
+                help="목록에 없는 기법은 직접 입력 후 Enter로 추가할 수 있습니다.",
             )
             with st.expander(":material/help: 기법 설명 보기"):
                 st.markdown(
