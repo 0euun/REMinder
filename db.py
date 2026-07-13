@@ -16,14 +16,23 @@ DREAM_TYPES = {
     "OTHER": "기타",
 }
 
-TECHNIQUES = ["WBTB", "MILD", "WILD", "FILD", "SSILD", "현실 확인", "수면 일기"]
+TECHNIQUES = [
+    "DILD", "WBTB", "MILD", "WILD", "DEILD", "FILD", "SSILD", "VILD",
+    "CAT", "ADA", "SIP", "현실 확인", "수면 일기",
+]
 
 TECHNIQUE_DESC = {
+    "DILD": "Dream Induced Lucid Dream — 별도 유도 기법 없이 꿈을 꾸던 중 위화감을 느끼고 자연스럽게 '이거 꿈이다'라고 자각하는 방식. 평소 reality check 습관이 쌓이면 저절로 발생하는 경우가 많음.",
     "WBTB": "Wake Back To Bed — 5~6시간 수면 후 잠깐 깨어 있다가 다시 잠드는 기법. REM 수면 진입을 노림.",
     "MILD": "Mnemonic Induction of Lucid Dreams — 잠들기 전 드림사인을 떠올리며 '꿈에서 알아차리겠다'는 의도를 반복 각인.",
     "WILD": "Wake Initiated Lucid Dream — 깨어있는 상태에서 의식을 유지하며 곧바로 꿈 속으로 진입하는 고급 기법.",
+    "DEILD": "Dream Exit Induced Lucid Dream — 꿈에서 깨어난 직후 움직이지 않고 의식만 유지한 채 다시 꿈으로 바로 진입하는 기법.",
     "FILD": "Finger Induced Lucid Dream — 반수면 상태에서 손가락을 아주 살짝 두드리며 의식을 꿈으로 끌어들이는 기법.",
     "SSILD": "Senses Initiated Lucid Dream — 눈/귀/몸 감각에 반복적으로 주의를 기울여 자각몽 상태로 유도.",
+    "VILD": "Visualized Induced Lucid Dream — 잠들기 전 원하는 꿈 장면을 구체적으로 시각화하며 그 안에서 자각하는 상상을 반복하는 기법.",
+    "CAT": "Cycle Adjustment Technique — 평소보다 일찍 기상해 1~2시간 활동 후 '지금부터 자각몽을 꾸겠다'는 의도로 다시 잠드는 기법.",
+    "ADA": "All Day Awareness — 하루 종일 '지금 꿈인가?'라는 자각 상태를 유지하려 노력해 꿈에서도 같은 자각이 이어지도록 하는 기법.",
+    "SIP": "Sleep Interruption — 알람 등으로 수면 중간에 짧게 깨어나 REM 수면 빈도를 늘리는 기법 (WBTB와 함께 쓰이는 경우가 많음).",
     "현실 확인": "Reality Check — 낮 동안 '지금 꿈인가?'를 의식적으로 확인 (손 보기, 코 막고 숨쉬기 등). 꿈에서도 같은 행동을 하도록 습관화.",
     "수면 일기": "Sleep Journal — 매일 아침 꿈을 바로 기록하는 습관. 꿈 회상력을 높이고 드림사인 파악에 도움.",
 }
