@@ -10,6 +10,18 @@ import streamlit as st
 import db
 import llm
 
+st.markdown("""
+    <style>
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    .stAppDeployButton {display: none;}
+    div[data-testid="stStatusWidget"] {visibility: hidden;}
+    /* 우측 하단 프로필/호스팅 배지 */
+    [data-testid="stDecoration"] {display: none;}
+    a[href*="streamlit.io"] {display: none;}
+    </style>
+""", unsafe_allow_html=True)
+
 db.init_db()
 
 st.set_page_config(
